@@ -1,6 +1,7 @@
 name: tag.yml
 on:
-  workflow_call:
+  repository_dispatch:
+    types: [on-demand-test]
   push:
     branches:
       - staging
