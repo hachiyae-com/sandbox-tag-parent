@@ -20,6 +20,6 @@ runs:
         ref: ${{inputs.ref}}
     - name: git tag push
       run: |
-        git tag ${{inputs.tag}}
+        git tag -f ${{inputs.tag}}
         git push --tags -f origin ${{inputs.tag}}
       shell: bash
