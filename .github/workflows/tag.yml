@@ -1,0 +1,15 @@
+name: tag.yml
+on:
+  push:
+    branches:
+      - staging
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/tag/staging
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.ref }}
