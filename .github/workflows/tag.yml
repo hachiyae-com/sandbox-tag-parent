@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with: 
-          repository: 'sandbox-tag-parent'
+          repository: 'hachi-eiji/sandbox-tag-parent'
       - uses: ./.github/actions/tag/staging
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
