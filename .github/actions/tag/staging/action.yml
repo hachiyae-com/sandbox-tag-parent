@@ -15,5 +15,5 @@ runs:
     - name: git tag push
       run: |
         git tag ${{inputs.tag}}
-        git push origin ${{inputs.tag}}
+        git push -f origin ${{inputs.tag}}
       shell: bash
