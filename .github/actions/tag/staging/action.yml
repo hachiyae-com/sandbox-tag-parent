@@ -1,0 +1,19 @@
+name: sample
+description: this is sample
+inputs:
+  tag:
+    required: true
+    description: tag
+    default: ''
+  token:
+    required: true
+    description: GitHub Token
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v3
+    - name: git tag push
+      run: |
+        git tag ${{github.events.inputs.tag}}
+        git push origin ${{github.events.inputs.tag}}
+      shell: bash
