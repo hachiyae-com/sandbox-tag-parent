@@ -17,7 +17,7 @@ runs:
   steps:
     - uses: actions/checkout@v4
       with:
-        ref: ${{input.ref}}
+        ref: ${{inputs.ref}}
     - name: git tag push
       run: |
         git tag ${{inputs.tag}}
