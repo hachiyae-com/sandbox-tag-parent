@@ -12,4 +12,4 @@ jobs:
       - uses: ./.github/actions/tag/staging
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ github.ref }}
+          tag: 'staging-test'
