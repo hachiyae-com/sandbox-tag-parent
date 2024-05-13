@@ -11,9 +11,9 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: git tag push
       run: |
-        git tag ${{github.events.inputs.tag}}
-        git push origin ${{github.events.inputs.tag}}
+        git tag ${{inputs.tag}}
+        git push origin ${{inputs.tag}}
       shell: bash
