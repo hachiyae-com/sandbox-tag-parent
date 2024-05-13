@@ -8,10 +8,16 @@ inputs:
   token:
     required: true
     description: GitHub Token
+  ref:
+    required: true
+    description: git ref
+    default: 'staging'
 runs:
   using: composite
   steps:
     - uses: actions/checkout@v4
+      with:
+        ref: ${{input.ref}}
     - name: git tag push
       run: |
         git tag ${{inputs.tag}}
