@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with: 
-          repository: 'hachi-eiji/sandbox-tag-parent'
+          repository: 'hachiyae-com/sandbox-tag-parent'
           ref: 'staging'
       - uses: ./.github/actions/tag/staging
         with:
