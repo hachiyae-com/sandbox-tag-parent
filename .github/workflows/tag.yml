@@ -13,7 +13,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/tag/staging
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          tag: 'staging-test'
+      - uses: actions/setup-node@v4
+      - run: npm install @octokit/app
+      - name: dispatch child tagging
+        run: |
+          const { App } = require("@octokit/app");
+          const app = App({
+            appId: "${{env.appId}}",
+            private_key: "${{env.private_key}}"
+            oauth: {
+              clientId: "${{env.client_id}}",
+              client_secret: "${{env.client_secret}}"
+            }
+          });
+          const { data } = await app.octokit.request("/app");
+          console.log("authenticated as %s", data.name);
+        env:
+          appId: ${{secret.tagging_app_id}}
+          private_key: ${{secret.tagging_app_private_key}}
+          client_id: ${{secret.tagging_app_oauth_client_id}}
+          client_secret: ${{secret.tagging_app_oauth_client_secret}}
+      #- uses: ./.github/actions/tag/staging
+      #  with:
+     #     token: ${{ secrets.GITHUB_TOKEN }}
+      #    tag: 'staging-test'
