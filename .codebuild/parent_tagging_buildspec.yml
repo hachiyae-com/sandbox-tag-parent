@@ -1,0 +1,18 @@
+version: 0.2
+env:
+  git-credential-helper: yes
+phases:
+  build:
+    commands:
+      - |
+        ls -la
+        git branch 
+        git checkout origin/${branch_name}
+        if [ "$branch_name" = 'staging' ]; then
+          git push origin --delete ${tag_name}
+          git tag -f ${tag_name}
+          git push --tags -f origin ${tag_name}
+        elif [ "$branch_name" = 'main' ]; then
+          git tag "${tag_name}"
+          git push --tags origin "${tag_name}"
+        fi
