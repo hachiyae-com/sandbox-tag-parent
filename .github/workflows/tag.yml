@@ -20,7 +20,7 @@ jobs:
           const { App } = require("@octokit/app");
           const app = App({
             appId: "${{env.appId}}",
-            private_key: "${{env.private_key}}"
+            private_key: "${{env.private_key}}",
             oauth: {
               clientId: "${{env.client_id}}",
               client_secret: "${{env.client_secret}}"
