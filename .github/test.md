@@ -2,4 +2,4 @@ test
 aaa
 aaaa
 bbb
-bbbbb
+bb
