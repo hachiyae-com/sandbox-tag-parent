@@ -1,0 +1,42 @@
+name: release note
+on:
+  push:
+    tags:
+      - release-*
+permissions:
+  contents: read
+  deployments: write
+jobs:
+  release_note:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: create lease note
+        uses: actions/github-script@v7
+        env:
+          TZ: 'Asia/Tokyo'
+        with:
+          result-encoding: string
+          retries: 3
+          retry-exempt-status-codes: 400,401
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const tag = context.ref;
+            const {owner, repo} = context.repo;
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth();
+            const date = now.getDate();
+            const name = `release ${tag} ${year}/${month}/${date}`;
+            
+            await octokit.rest.repos.createRelease({
+              owner: owner,
+              repo: repo,
+              tag_name: tag,
+              name: name,
+              draft: false,
+              prerelease: false,
+              generate_release_notes: false,
+              make_latest: true
+            });
