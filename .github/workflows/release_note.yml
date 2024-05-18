@@ -26,9 +26,10 @@ jobs:
             const {owner, repo} = context.repo;
             const now = new Date();
             const year = now.getFullYear();
-            const month = now.getMonth() + 1;
+            const month = `${now.getMonth() + 1}`.padStart(2, '0');
             const date = now.getDate();
-            const name = `release ${tag.replace('refs/tags/release-','')} ${year}/${month}/${date}`;
+            const tag_name = tag.replace('refs/tags/release-','');
+            const name = `${tag_name} ${year}/${month}/${date}`;
 
             await github.rest.repos.createRelease({
               owner: owner,
