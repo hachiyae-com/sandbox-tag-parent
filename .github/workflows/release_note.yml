@@ -28,7 +28,7 @@ jobs:
             const year = now.getFullYear();
             const month = now.getMonth() + 1;
             const date = now.getDate();
-            const name = `release ${tag.replace('ref/tags/release-')} ${year}/${month}/${date}`;
+            const name = `release ${tag.replace('ref/tags/release-','')} ${year}/${month}/${date}`;
 
             await github.rest.repos.createRelease({
               owner: owner,
