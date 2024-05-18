@@ -22,14 +22,14 @@ jobs:
           retry-exempt-status-codes: 400,401
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const tag = context.ref.replace('refs/tags/','');
+            const tag = context.ref;
             const {owner, repo} = context.repo;
             const now = new Date();
             const year = now.getFullYear();
             const month = now.getMonth() + 1;
             const date = now.getDate();
-            const name = `release ${tag} ${year}/${month}/${date}`;
-            
+            const name = `release ${tag.replace('ref/tags/release-')} ${year}/${month}/${date}`;
+
             await github.rest.repos.createRelease({
               owner: owner,
               repo: repo,
