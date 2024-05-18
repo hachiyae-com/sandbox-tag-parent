@@ -30,7 +30,7 @@ jobs:
             const date = now.getDate();
             const name = `release ${tag} ${year}/${month}/${date}`;
             
-            await octokit.rest.repos.createRelease({
+            await github.rest.repos.createRelease({
               owner: owner,
               repo: repo,
               tag_name: tag,
@@ -38,5 +38,5 @@ jobs:
               draft: false,
               prerelease: false,
               generate_release_notes: false,
-              make_latest: true
+              make_latest: 'true'
             });
