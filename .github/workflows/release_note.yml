@@ -4,8 +4,8 @@ on:
     tags:
       - release-*
 permissions:
-  contents: read
-  deployments: write
+  contents: write
+  workflows: write
 jobs:
   release_note:
     runs-on: ubuntu-latest
