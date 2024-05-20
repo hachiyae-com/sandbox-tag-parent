@@ -28,7 +28,7 @@ jobs:
           gem install specific_install
           gem specific_install -l https://github.com/hachi-eiji/git-pr-release.git -b 'feat/add-draft-option'
       - name: Create pull request from development to staging
-        if: ${{ github.refs == 'refs/heads/development' }}
+        if: ${{ github.ref == 'refs/heads/development' }}
         run: |
           git-pr-release --squashed
         env:
@@ -39,7 +39,7 @@ jobs:
           GIT_PR_RELEASE_DRAFT: true
           TZ: Asia/Tokyo
       - name: Create pull request from staging to main
-        if: ${{ github.refs == 'refs/heads/staging' }}
+        if: ${{ github.ref == 'refs/heads/staging' }}
         run: |
           git-pr-release --squashed
         env:
