@@ -29,7 +29,7 @@ runs:
         git push --tags -f origin ${{inputs.tag}}
       shell: bash
       env:
-        GITHUB_TOKEN: ${{ token }}
+        GITHUB_TOKEN: ${{ inputs.token }}
     - name: git tag push
       if: ${{inputs.force == 'false'}}
       run: |
@@ -37,4 +37,4 @@ runs:
         git push --tags origin ${{inputs.tag}}
       shell: bash
       env:
-        GITHUB_TOKEN: ${{ token }}
+        GITHUB_TOKEN: ${{ inputs.token }}
