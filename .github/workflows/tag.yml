@@ -30,7 +30,7 @@ jobs:
         id: tag-name
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
-          release_number=$(git ls-remote --tags | grep 'refs/tags/release-' | sort -t '/' -V -k 3 | tail -n 1 | awk -F' ' '{print $2}' | tr -d 'refs/tags/release-')
+          release_number=$(git ls-remote --tags | grep 'refs/tags/release-' | sort -t '/' -V -k 3 | tail -n 1 | awk -F' ' '{print $2}' | tr -d 'refs/tags/release-' | awk -F'.' '{print $1}')
           release_number=${release_number:-1}
           release_number=$((release_number+1))
           tag_name="release-${release_number}.0.0"
