@@ -28,6 +28,7 @@ jobs:
         id: tag-name
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
+          git fetch
           release_number=$(git tag --list 'release-*' | awk -F'-' '{print $2}' | awk -F'.' '{print $1}' | sort -rn | head -n 1)
           release_number=${release_number:-1}
           release_number=$((release_number+1))
