@@ -28,9 +28,13 @@ runs:
         git tag -f ${{inputs.tag}}
         git push --tags -f origin ${{inputs.tag}}
       shell: bash
+      env:
+        GITHUB_TOKEN: ${{ token }}
     - name: git tag push
       if: ${{inputs.force == 'false'}}
       run: |
         git tag ${{inputs.tag}}
         git push --tags origin ${{inputs.tag}}
       shell: bash
+      env:
+        GITHUB_TOKEN: ${{ token }}
