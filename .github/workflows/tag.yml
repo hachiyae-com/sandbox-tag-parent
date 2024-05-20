@@ -14,9 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
       - uses: actions/setup-node@v4
-      - name: git fetch
-        run: git fetch
       - name: Create staging tag
         if: ${{ github.ref == 'refs/heads/staging' }}
         uses: ./.github/actions/tag
@@ -30,7 +30,7 @@ jobs:
         id: tag-name
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
-          release_number=$(git ls-remote --tags | grep 'refs/tags/release-' | sort -t '/' -V -k 3 | tail -n 1 | awk -F' ' '{print $2}' | tr -d 'refs/tags/release-' | awk -F'.' '{print $1}')
+          release_number=$(git ls-remote --tags | grep 'refs/tags/release-' | awk -F' ' '{print $2}' | tr -d 'refs/tags/release-' | sort -V | awk -F'.' '{print $1}' | tail -n 1)
           release_number=${release_number:-1}
           release_number=$((release_number+1))
           tag_name="release-${release_number}.0.0"
