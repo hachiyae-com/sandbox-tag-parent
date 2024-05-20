@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - staging
+      - main
 permissions:
   contents: write
   
@@ -14,7 +15,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-      - uses: ./.github/actions/tag/staging
+      - name: Create staging tag
+        if: ${{ github.ref == 'refs/heads/staging' }}
+        uses: ./.github/actions/tag
         with:
          token: ${{ secrets.GITHUB_TOKEN }}
          tag: 'staging-test'
+         ref: ${{ github.ref }}
+      - name: Create production tag name
+        id: tag-name
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: |
+          release_number=$(git tag --list 'release-*' | awk -F'-' '{print $2}' | awk -F'.' '{print $1}' | sort -rn | head -n 1)
+          release_number=${release_number:-1}
+          release_number=$((release_number+1))
+          tag_name="release-${release_number}.0.0"
+          echo "tag_name=${tag_name}" >> $GITHUB_OUTPUT
+      - name: Create production tag
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: ./.github/actions/tag
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ steps.tag-name.outputs.tag_name }}
+          ref: ${{ github.ref }}
