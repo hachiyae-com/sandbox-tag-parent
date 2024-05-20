@@ -25,6 +25,8 @@ runs:
     - name: git force tag push
       if: ${{inputs.force == 'true'}}
       run: |
+        git config --local user.email github-actions[bot]@users.noreply.github.com
+        git config --local user.name github-actions[bot]
         git tag -f ${{inputs.tag}}
         git push --tags -f origin ${{inputs.tag}}
       shell: bash
