@@ -15,6 +15,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
+      - name: git fetch
+        run: git fetch
       - name: Create staging tag
         if: ${{ github.ref == 'refs/heads/staging' }}
         uses: ./.github/actions/tag
@@ -28,7 +30,6 @@ jobs:
         id: tag-name
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
-          git fetch
           release_number=$(git tag --list 'release-*' | awk -F'-' '{print $2}' | awk -F'.' '{print $1}' | sort -rn | head -n 1)
           release_number=${release_number:-1}
           release_number=$((release_number+1))
