@@ -22,7 +22,9 @@ jobs:
          token: ${{ secrets.GITHUB_TOKEN }}
          tag: 'staging-test'
          ref: ${{ github.ref }}
+         force: 'true'
       - name: Create production tag name
+        shell: bash
         id: tag-name
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
@@ -30,6 +32,7 @@ jobs:
           release_number=${release_number:-1}
           release_number=$((release_number+1))
           tag_name="release-${release_number}.0.0"
+          echo ${tag_name}
           echo "tag_name=${tag_name}" >> $GITHUB_OUTPUT
       - name: Create production tag
         if: ${{ github.ref == 'refs/heads/main' }}
