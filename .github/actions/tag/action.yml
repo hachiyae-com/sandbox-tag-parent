@@ -12,14 +12,25 @@ inputs:
     required: true
     description: git ref
     default: 'staging'
+  force:
+    require: 'true'
+    description: force option
+    default: 'false'
 runs:
   using: composite
   steps:
     - uses: actions/checkout@v4
       with:
         ref: ${{inputs.ref}}
-    - name: git tag push
+    - name: git force tag push
+      if: ${{inputs.force == 'true'}}
       run: |
         git tag -f ${{inputs.tag}}
         git push --tags -f origin ${{inputs.tag}}
+      shell: bash
+    - name: git tag push
+      if: ${{inputs.force == 'false'}}
+      run: |
+        git tag ${{inputs.tag}}
+        git push --tags origin ${{inputs.tag}}
       shell: bash
