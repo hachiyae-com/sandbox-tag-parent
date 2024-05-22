@@ -1,8 +1,5 @@
 name: release note
 on:
-  workflow_run:
-    workflows: [tag]
-    types: [completed]
   push:
     tags:
       - release-*
