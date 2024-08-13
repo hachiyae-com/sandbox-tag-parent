@@ -44,4 +44,4 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
             "/repos/${{ github.repository }}/statuses/${{ steps.commit.outputs.sha }}" \
-           -f "state=${{steps.review.conclusion}}" -f "test/review(pull_request)"
+           -f "state=${{steps.review.conclusion}}" -f "test/review"
