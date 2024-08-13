@@ -55,8 +55,8 @@ jobs:
         shell: bash
         run: |
           curl -X POST -H "Authorization: token ${GITHUB_TOKEN}" \
-            -d '{"state": "${{steps.review.conclusion}}", "context": "review", "description": "Description of the status"}' \
+            -d '{"state": "${{jobs.re-run-review.steps.review.conclusion}}", "context": "review", "description": "Description of the status"}' \
             https://api.github.com/repos/${{ github.repository }}/statuses/${{ steps.commit.outputs.sha }}
           curl -X POST -H "Authorization: token ${GITHUB_TOKEN}" \
-            -d '{"state": "${{steps.review2.conclusion}}", "context": "review2", "description": "Description of the status"}' \
+            -d '{"state": "${{jobs.re-run-review.steps.review2.conclusion}}", "context": "review2", "description": "Description of the status"}' \
             https://api.github.com/repos/${{ github.repository }}/statuses/${{ steps.commit.outputs.sha }}
