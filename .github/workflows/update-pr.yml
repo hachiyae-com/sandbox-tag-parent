@@ -45,7 +45,7 @@ jobs:
           gh workflow run test.yml --ref ${{github.head_ref}}
           RUN_ID=$(gh run list --workflow=test.yml -b ${{github.head_ref}} -e workflow_dispatch --json number,status,conclusion,databaseId --jq '. | max_by(.number).databaseId')
           gh run watch ${RUN_ID}
-          conclusion=$(gh run list --workflow=test2.yml -b test-hoge -e workflow_dispatch --json number,status,conclusion,databaseId --jq '. | select_by(.databaseId =="$RUN_ID").conclusion')
+          conclusion=$(gh run list --workflow=test2.yml -b test-hoge -e workflow_dispatch --json number,status,conclusion,databaseId --jq '. | select(.databaseId == $RUN_ID).conclusion')
           echo "conclusion=${conclusion}" >> "$GITHUB_OUTPUT"
   re-run-review2:
     runs-on: ubuntu-latest
@@ -63,7 +63,7 @@ jobs:
           gh workflow run test2.yml --ref ${{github.head_ref}}
           RUN_ID=$(gh run list --workflow=test2.yml -b ${{github.head_ref}} -e workflow_dispatch --json number,status,conclusion,databaseId --jq '. | max_by(.number).databaseId')          
           gh run watch $RUN_ID
-          conclusion=$(gh run list --workflow=test2.yml -b test-hoge -e workflow_dispatch --json number,status,conclusion,databaseId --jq '. | select_by(.databaseId =="$RUN_ID").conclusion')
+          conclusion=$(gh run list --workflow=test2.yml -b test-hoge -e workflow_dispatch --json number,status,conclusion,databaseId --jq '. | select(.databaseId == $RUN_ID).conclusion')
           echo "conclusion=${conclusion}" >> "$GITHUB_OUTPUT"
   update-status-review1:  
     runs-on: ubuntu-latest
