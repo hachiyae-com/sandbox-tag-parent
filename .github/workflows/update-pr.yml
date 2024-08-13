@@ -39,7 +39,7 @@ jobs:
       - name: run id
         shell: bash
         run: |
-          RUN_RESULT=$(gh run list -b ${{github.head_ref}} -e pull_request -R ${{ github.repository }} -w test --jq --json attempt,conclusion,createdAt,databaseId,displayTitle,event,headBranch,headSha,name,number,startedAt,status,updatedAt,url,workflowDatabaseId,workflowName)
+          RUN_RESULT=$(gh run list -b ${{github.head_ref}} -e pull_request -R ${{ github.repository }} -w test --jq "." --json "attempt,conclusion,createdAt,databaseId,displayTitle,event,headBranch,headSha,name,number,startedAt,status,updatedAt,url,workflowDatabaseId,workflowName)"
           # RUN_RESULT=$(gh api -q -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -F "event=pull_request&branch=${{github.head_ref}}" /repos/${{ github.repository }}/actions/runs)
           echo ${RUN_RESULT}
           
