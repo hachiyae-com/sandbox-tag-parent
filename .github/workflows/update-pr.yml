@@ -31,4 +31,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: run test
-        uses: .github/workflows/test.yml@main
+        uses: ./.github/workflows/test.yml@main
