@@ -70,5 +70,5 @@ jobs:
             -d '{"state": "${{jobs.re-run-review1.outputs.result}}", "context": "review", "description": "Description of the status"}' \
             https://api.github.com/repos/${{ github.repository }}/statuses/${{ steps.commit.outputs.sha }}
           curl -X POST -H "Authorization: token ${GITHUB_TOKEN}" \
-            -d '{"state": "${{jobs.re-run-review1.outputs.result}}", "context": "review2", "description": "Description of the status"}' \
+            -d '{"state": "${{jobs.re-run-review2.outputs.result}}", "context": "review2", "description": "Description of the status"}' \
             https://api.github.com/repos/${{ github.repository }}/statuses/${{ steps.commit.outputs.sha }}
