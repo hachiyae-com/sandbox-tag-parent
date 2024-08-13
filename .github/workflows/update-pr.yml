@@ -33,7 +33,7 @@ jobs:
     env:
       GITHUB_TOKEN: ${{ secrets.PAT }}
     outputs:
-      conclusion: ${{ steps.review.outputs.conclusion }}
+      conclusion: ${{ steps.review.outputs.result }}
     steps:
       - uses: actions/checkout@v4
       - name: re-run review
@@ -50,7 +50,7 @@ jobs:
     env:
       GITHUB_TOKEN: ${{ secrets.PAT }}
     outputs:
-      conclusion: ${{ steps.review2.outputs.conclusion }}
+      conclusion: ${{ steps.review2.outputs.result }}
     steps:
       - uses: actions/checkout@v4
       - name: re-run review2
