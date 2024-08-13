@@ -17,6 +17,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
       - name: update git commit
         shell: bash
+        id: commit
         run: |
           echo "test\n" >> .github/test.md
           git add .github/test.md
@@ -25,6 +26,7 @@ jobs:
           git remote set-url origin "https://${GITHUB_AUTHOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git commit -m "chore: update"
           git push origin HEAD:${{github.head_ref}}
+          echo "sha=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
       - name: re-run review
         shell: bash
         id: review
@@ -40,5 +42,5 @@ jobs:
             --method POST \
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
-            "/repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            "/repos/${{ github.repository }}/statuses/${{ step.commit.outputs.sha }}" \
            -f "state=${{steps.review.conclusion}}"
