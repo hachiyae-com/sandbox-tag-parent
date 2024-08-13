@@ -27,4 +27,9 @@ jobs:
           git remote set-url origin "https://${GITHUB_AUTHOR}:${GITHUB_PAT}@github.com/${GITHUB_REPOSITORY}.git"
           git commit -m "chore: update"
           git push -u origin HEAD:${{github.event.pull_request.head.ref}}
-
+      - name: update status
+        shell: bash
+        run: |
+          curl -X POST -H "Authorization: token ${GITHUB_PAT}" \
+            -d '{"state": "success", "context": "ci/check-name", "description": "Description of the status"}' \
+            https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }}
