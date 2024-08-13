@@ -1,6 +1,7 @@
 name: update pull request
 on:
   pull_request:
+     types: [opened, synchronize]
 
 permissions:
   contents: write
