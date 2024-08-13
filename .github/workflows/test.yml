@@ -10,10 +10,8 @@ permissions:
 jobs:
   review:
     runs-on: ubuntu-latest
-    env:
-      GITHUB_TOKEN: ${{ secrets.PAT }}
     steps:
       - uses: actions/checkout@v4
-      - name: update git commit
-        shell: bash
-        run: echo 'hello'
+      - uses: ./.github/actions/review
+        with:
+          ref: ${{github.ref}}
