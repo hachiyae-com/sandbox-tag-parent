@@ -27,13 +27,13 @@ jobs:
           git commit -m "chore: update"
           git push -u origin HEAD:${{github.event.pull_request.head.ref}}
           echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-  ru-run-review1:
+  re-run-review1:
     runs-on: ubuntu-latest
     needs: [update-commit]
     env:
       GITHUB_TOKEN: ${{ secrets.PAT }}
     outputs:
-      result: ${{ steps.review.outputs.conclusion }}
+      conclusion: ${{ steps.review.outputs.conclusion }}
     steps:
       - uses: actions/checkout@v4
       - name: re-run review
@@ -42,13 +42,13 @@ jobs:
         continue-on-error: true
         run: |
           gh workflow run test.yml --ref ${{github.head_ref}}
-  ru-run-review2:
+  re-run-review2:
     runs-on: ubuntu-latest
     needs: [update-commit]
     env:
       GITHUB_TOKEN: ${{ secrets.PAT }}
     outputs:
-      result: ${{ steps.review.outputs.conclusion }}
+      conclusion: ${{ steps.review2.outputs.conclusion }}
     steps:
       - uses: actions/checkout@v4
       - name: re-run review2
@@ -57,9 +57,9 @@ jobs:
         continue-on-error: true
         run: |
           gh workflow run test2.yml --ref ${{github.head_ref}}   
-  update-status:  
+  update-status-review1:  
     runs-on: ubuntu-latest
-    needs: [ru-run-review1, ru-run-review2]
+    needs: [re-run-review1]
     env:
       GITHUB_TOKEN: ${{ secrets.PAT }}
     steps:
@@ -67,8 +67,17 @@ jobs:
         shell: bash
         run: |
           curl -X POST -H "Authorization: token ${GITHUB_TOKEN}" \
-            -d '{"state": "${{jobs.re-run-review1.outputs.result}}", "context": "review", "description": "Description of the status"}' \
+            -d '{"state": "${{jobs.re-run-review1.outputs.conclusion}}", "context": "review2", "description": "Description of the status"}' \
             https://api.github.com/repos/${{ github.repository }}/statuses/${{ steps.commit.outputs.sha }}
+  update-status-review2:
+    runs-on: ubuntu-latest
+    needs: [re-run-review2]
+    env:
+      GITHUB_TOKEN: ${{ secrets.PAT }}
+    steps:
+      - name: update status
+        shell: bash
+        run: |
           curl -X POST -H "Authorization: token ${GITHUB_TOKEN}" \
-            -d '{"state": "${{jobs.re-run-review2.outputs.result}}", "context": "review2", "description": "Description of the status"}' \
+            -d '{"state": "${{jobs.re-run-review2.outputs.conclusion}}", "context": "review2", "description": "Description of the status"}' \
             https://api.github.com/repos/${{ github.repository }}/statuses/${{ steps.commit.outputs.sha }}
