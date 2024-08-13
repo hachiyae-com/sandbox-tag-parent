@@ -31,5 +31,5 @@ jobs:
         shell: bash
         run: |
           curl -X POST -H "Authorization: token ${GITHUB_PAT}" \
-            -d '{"state": "success", "context": "ci/check-name", "description": "Description of the status"}' \
+            -d '{"state": "success", "context": "test / review (pull_request)", "description": "Description of the status"}' \
             https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }}
