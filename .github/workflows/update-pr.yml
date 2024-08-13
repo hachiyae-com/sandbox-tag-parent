@@ -26,5 +26,5 @@ jobs:
           git config --local user.email "hachiyae@gmail.com"
           git remote set-url origin "https://${GITHUB_AUTHOR}:${GITHUB_PAT}@github.com/${GITHUB_REPOSITORY}.git"
           git commit -m "chore: update"
-          git push -u origin HEAD:${{github.event.pull_request.head.ref }}
+          git push -u origin HEAD:${{github.event.pull_request.head.ref}}
 
