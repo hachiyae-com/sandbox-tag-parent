@@ -4,3 +4,4 @@ aaaa
 bbb
 
 ddd
+test\n
