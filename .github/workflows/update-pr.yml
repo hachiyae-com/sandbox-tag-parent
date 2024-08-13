@@ -25,34 +25,5 @@ jobs:
           git config --local user.email "hachiyae@gmail.com"
           git remote set-url origin "https://${GITHUB_AUTHOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git commit -m "chore: update"
-          git push origin HEAD:${{github.head_ref}}
-          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-      - name: re-run review
-        shell: bash
-        id: review
-        continue-on-error: true
-        run: |
-          gh workflow run test.yml --ref ${{github.head_ref}}
-      - name: test
-        shell: bash
-        run: echo ${{steps.review.conclusion}}
-      - name: run id
-        shell: bash
-        id: run-id
-        run: |
-          RUN_IDS=$(gh run list \
-          -b ${{github.head_ref}} \
-          --json "databaseId,number,workflowName" \
-          --jq '[.[] | select(.workflowName == "test" or .workflowName == "test2")] | group_by(.workflowName) | map(max_by(.number))' \
-          -R ${{ github.repository }})
-          RUN_ID=$(echo $RUN_IDS | jq -r '.[] | select(.workflowName == "test").databaseId')
-          echo "run_id=${RUN_ID}" >> "$GITHUB_OUTPUT"
-      - name: update
-        shell: bash
-        run: |
-          gh api \
-            --method POST \
-            -H "Accept: application/vnd.github+json" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            /repos/${{github.repository}}/actions/runs/${{steps.run-id.outputs.run_id}}/deployment_protection_rule \
-             -f "environment_name=test" -f "state=approved"
+          git push origin HEAD:${{github.event.pull_request.head.ref }}
+
