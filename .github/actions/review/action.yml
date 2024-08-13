@@ -1,0 +1,17 @@
+name: review
+description: this is sample
+inputs:
+  ref:
+    required: true
+    description: git ref
+permission:
+  content: read
+  pull-request: read
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{inputs.ref}}
+    - run: |
+        cat ./.github/test.md
