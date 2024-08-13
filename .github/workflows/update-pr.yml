@@ -28,4 +28,4 @@ jobs:
       - name: re-run test
         shell: bash
         run: |
-          gh workflow run test.yml --ref ${{github.github_ref}}
+          gh workflow run test.yml --ref ${{GITHUB_REF}}
