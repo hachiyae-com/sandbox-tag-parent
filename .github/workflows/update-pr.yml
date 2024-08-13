@@ -1,7 +1,6 @@
 name: update pull request
 on:
   pull_request:
-     types: [opened, synchronize]
 
 permissions:
   contents: write
@@ -28,12 +27,24 @@ jobs:
           git commit -m "chore: update"
           git push -u origin HEAD:${{github.event.pull_request.head.ref}}
           echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - name: re-run review
+        shell: bash
+        id: review
+        continue-on-error: true
+        run: |
+          gh workflow run test.yml --ref ${{github.head_ref}}
+      - name: re-run review2
+        shell: bash
+        id: review2
+        continue-on-error: true
+        run: |
+          gh workflow run test2.yml --ref ${{github.head_ref}}          
       - name: update status
         shell: bash
         run: |
           curl -X POST -H "Authorization: token ${GITHUB_PAT}" \
-            -d '{"state": "success", "context": "review", "description": "Description of the status"}' \
+            -d '{"state": "${{steps.review.conclusion}}", "context": "review", "description": "Description of the status"}' \
             https://api.github.com/repos/${{ github.repository }}/statuses/${{ steps.commit.outputs.sha }}
           curl -X POST -H "Authorization: token ${GITHUB_PAT}" \
-            -d '{"state": "success", "context": "review2", "description": "Description of the status"}' \
+            -d '{"state": "${{steps.review2.conclusion}}", "context": "review2", "description": "Description of the status"}' \
             https://api.github.com/repos/${{ github.repository }}/statuses/${{ steps.commit.outputs.sha }}
