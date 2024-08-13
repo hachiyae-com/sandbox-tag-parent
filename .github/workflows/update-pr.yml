@@ -37,6 +37,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.PAT }}
     outputs:
       conclusion: ${{ steps.review.outputs.conclusion_reivew1 }}
+      sha: ${{needs.update-commit.outputs.sha}}
     steps:
       - uses: actions/checkout@v4
       - name: re-run review
@@ -47,6 +48,7 @@ jobs:
           RUN_ID=$(gh run list --workflow=test.yml -b ${{github.head_ref}} -e workflow_dispatch --json number,status,conclusion,databaseId --jq '. | max_by(.number).databaseId')
           gh run watch ${RUN_ID}
           conclusion=$(gh run list --workflow=test2.yml -b test-hoge -e workflow_dispatch --json number,status,conclusion,databaseId --jq ".[] | select(.databaseId == ${RUN_ID}).conclusion")
+          echo $conclusion
           echo "conclusion_reivew1=${conclusion}" >> "$GITHUB_OUTPUT"
   re-run-review2:
     runs-on: ubuntu-latest
@@ -55,6 +57,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.PAT }}
     outputs:
       conclusion: ${{ steps.review2.outputs.conclusion_reivew2 }}
+      sha: ${{needs.update-commit.outputs.sha}}
     steps:
       - uses: actions/checkout@v4
       - name: re-run review2
@@ -79,8 +82,8 @@ jobs:
             --method POST \
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
-            /repos/${{ github.repository }}/statuses/${{ needs.update-commit.outputs.sha }} \
-           -f "state=${{needs.re-run-review1.outputs.conclusion}}" -f "context=review2"
+            /repos/${{ github.repository }}/statuses/${{ needs.re-run-review1.outputs.sha }} \
+           -f "state=${{needs.re-run-review1.outputs.conclusion}}" -f "context=review1"
   update-status-review2:
     runs-on: ubuntu-latest
     needs: [re-run-review2]
@@ -94,5 +97,5 @@ jobs:
             --method POST \
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
-            /repos/${{ github.repository }}/statuses/${{ needs.update-commit.outputs.sha }} \
+            /repos/${{ github.repository }}/statuses/${{ needs.re-run-review2.outputs.sha }} \
            -f "state=${{needs.re-run-review2.outputs.conclusion}}" -f "context=review2"
