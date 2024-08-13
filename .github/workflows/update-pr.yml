@@ -44,7 +44,7 @@ jobs:
           --json "databaseId,number,workflowName" \
           --jq '[.[] | select(.workflowName == "test" or .workflowName == "test2")] | group_by(.workflowName) | map(max_by(.number))' \
           -R ${{ github.repository }})
-          TEST_RUN_ID=$(echo $RUN_IDS | jq '.[] | select(.workflowName == "test").databaseId')
+          TEST_RUN_ID=$(echo $RUN_IDS | jq -r '.[] | select(.workflowName == "test").databaseId')
           echo ${TEST_RUN_ID}
           gh api \
             --method POST \
