@@ -24,7 +24,7 @@ jobs:
           git add .github/test.md
           git config --local user.name "Eiji Hachiya"
           git config --local user.email "hachiyae@gmail.com"
-          git remote set-url origin "https://${GITHUB_AUTHOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git commit -m "chore: update"
           git push -u origin HEAD:${{github.event.pull_request.head.ref }}
 
