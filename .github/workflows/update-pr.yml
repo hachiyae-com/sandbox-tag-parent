@@ -25,10 +25,10 @@ jobs:
           git remote set-url origin "https://${GITHUB_AUTHOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git commit -m "chore: update"
           git push origin HEAD:${{github.head_ref}}
-  run-test:
+  review:
     runs-on: ubuntu-latest
     needs: [update-commit]
     steps:
       - uses: actions/checkout@v4
       - name: run test
-        uses: ./.github/workflows/test.yml
+        uses: .github/workflows/test.yml@main
