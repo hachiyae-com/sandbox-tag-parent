@@ -41,7 +41,9 @@ jobs:
         id: review
         continue-on-error: true
         run: |
-          gh workflow run test.yml --ref ${{github.head_ref}}
+          WORKFLOW=$(gh workflow run test.yml --ref ${{github.head_ref}})
+          echo $WORKFLOW
+          gh run watch --exit-status
   re-run-review2:
     runs-on: ubuntu-latest
     needs: [update-commit]
@@ -56,7 +58,8 @@ jobs:
         id: review2
         continue-on-error: true
         run: |
-          gh workflow run test2.yml --ref ${{github.head_ref}}   
+          gh workflow run test2.yml --ref ${{github.head_ref}}
+          gh run watch --exit-status 
   update-status-review1:  
     runs-on: ubuntu-latest
     needs: [re-run-review1]
