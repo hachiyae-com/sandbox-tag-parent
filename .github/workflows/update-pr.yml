@@ -10,7 +10,7 @@ jobs:
   update-commit:
     runs-on: ubuntu-latest
     env:
-      GITHUB_TOKEN: ${{ secrets.PAT }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -21,8 +21,8 @@ jobs:
         run: |
           echo "test\n" >> .github/test.md
           git add .github/test.md
-          git config --local user.name "Eiji Hachiya"
-          git config --local user.email "hachiyae@gmail.com"
+          git config --local user.name "github-actions[bot]@users.noreply.github.com"
+          git config --local user.email "github-actions[bot]"
           git remote set-url origin "https://${GITHUB_AUTHOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git commit -m "chore: update"
           git push origin HEAD:${{github.head_ref}}
