@@ -25,6 +25,7 @@ jobs:
           git remote set-url origin "https://${GITHUB_AUTHOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git commit -m "chore: update"
           git push origin HEAD:${{github.head_ref}}
-  review:
-    needs: [update-commit]
-    uses: ./.github/workflows/test.yml
+      - name: re-run test
+        shell: bash
+        run: |
+          gh workflow run test.yml
