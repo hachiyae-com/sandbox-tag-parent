@@ -66,7 +66,7 @@ jobs:
       - name: update status
         shell: bash
         run: |
-          STATUS=${{jobs.re-run-review1.outputs.conclusion}}
+          STATUS=${{needs.re-run-review1.outputs.conclusion}}
           curl -X POST -H "Authorization: token ${GITHUB_TOKEN}" \
             -d '{"state": "${STATUS}", "context": "review2", "description": "Description of the status"}' \
             https://api.github.com/repos/${{ github.repository }}/statuses/${{ steps.commit.outputs.sha }}
@@ -79,7 +79,7 @@ jobs:
       - name: update status
         shell: bash
         run: |
-          STATUS=${{jobs.re-run-review2.outputs.conclusion}}
+          STATUS=${{needs.re-run-review2.outputs.conclusion}}
           curl -X POST -H "Authorization: token ${GITHUB_TOKEN}" \
             -d '{"state": "${STATUS}", "context": "review2", "description": "Description of the status"}' \
             https://api.github.com/repos/${{ github.repository }}/statuses/${{ steps.commit.outputs.sha }}
