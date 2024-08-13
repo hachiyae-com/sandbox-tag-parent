@@ -39,5 +39,15 @@ jobs:
       - name: run id
         shell: bash
         run: |
-          RUN_RESULT=$(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -f "event=pull_request" -f "branch=${{github.head_ref}}" /repos/${{ github.repository }}/actions/runs)
-          echo $RUN_RESULT
+          RUN_IDS=$(gh run list \
+          -b ${{github.head_ref}} \
+          --json "databaseId,number,workflowName" \
+          --jq '[.[] | select(.workflowName == "test" or .workflowName == "test2")] | group_by(.workflowName) | map(max_by(.number))' \
+          -R ${{ github.repository }})
+          TEST_RUN_ID=$(echo $RUN_IDS | jq '.[] | select(.workflowName == "test").databaseId')
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /repos/${{github.repository}}/actions/runs/${TEST_RUN_ID}/deployment_protection_rule \
+             -f "environment_name=test" -f "state=approved"
