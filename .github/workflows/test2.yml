@@ -14,4 +14,4 @@ jobs:
       - uses: actions/checkout@v4
       - name: cat
         shell: bash
-        run: cat ./.github/test.md
+        run: cat ./.github/test.md && exit 1
