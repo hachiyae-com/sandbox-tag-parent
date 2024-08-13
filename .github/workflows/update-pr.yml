@@ -42,7 +42,7 @@ jobs:
         continue-on-error: true
         run: |
           gh workflow run test.yml --ref ${{github.head_ref}}
-          RUN_ID=$(gh run list --workflow=test.yml -b ${{github.head_ref}}) -e workflow_dispatch --json number,status,conclusion,databaseId --jq '. | max_by(.number).databaseId')
+          RUN_ID=$(gh run list --workflow=test.yml -b ${{github.head_ref}} -e workflow_dispatch --json number,status,conclusion,databaseId --jq '. | max_by(.number).databaseId')
           gh run watch ${RUN_ID} --exit-status
   re-run-review2:
     runs-on: ubuntu-latest
@@ -59,7 +59,7 @@ jobs:
         continue-on-error: true
         run: |
           gh workflow run test2.yml --ref ${{github.head_ref}}
-          RUN_ID=$(gh run list --workflow=test2.yml -b ${{github.head_ref}}) -e workflow_dispatch --json number,status,conclusion,databaseId --jq '. | max_by(.number).databaseId')          
+          RUN_ID=$(gh run list --workflow=test2.yml -b ${{github.head_ref}} -e workflow_dispatch --json number,status,conclusion,databaseId --jq '. | max_by(.number).databaseId')          
           gh run watch $RUN_ID --exit-status 
   update-status-review1:  
     runs-on: ubuntu-latest
