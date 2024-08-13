@@ -10,7 +10,7 @@ jobs:
   update-commit:
     runs-on: ubuntu-latest
     env:
-      GITHUB_PAT: ${{ secrets.PAT }}
+      GITHUB_TOKEN: ${{ secrets.PAT }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -23,7 +23,7 @@ jobs:
           git add .github/test.md
           git config --local user.name "Eiji Hachiya"
           git config --local user.email "hachiyae@gmail.com"
-          git remote set-url origin "https://${GITHUB_AUTHOR}:${GITHUB_PAT}@github.com/${GITHUB_REPOSITORY}.git"
+          git remote set-url origin "https://${GITHUB_AUTHOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git commit -m "chore: update"
           git push -u origin HEAD:${{github.event.pull_request.head.ref}}
           echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
@@ -42,9 +42,9 @@ jobs:
       - name: update status
         shell: bash
         run: |
-          curl -X POST -H "Authorization: token ${GITHUB_PAT}" \
+          curl -X POST -H "Authorization: token ${GITHUB_TOKEN}" \
             -d '{"state": "${{steps.review.conclusion}}", "context": "review", "description": "Description of the status"}' \
             https://api.github.com/repos/${{ github.repository }}/statuses/${{ steps.commit.outputs.sha }}
-          curl -X POST -H "Authorization: token ${GITHUB_PAT}" \
+          curl -X POST -H "Authorization: token ${GITHUB_TOKEN}" \
             -d '{"state": "${{steps.review2.conclusion}}", "context": "review2", "description": "Description of the status"}' \
             https://api.github.com/repos/${{ github.repository }}/statuses/${{ steps.commit.outputs.sha }}
