@@ -30,7 +30,9 @@ jobs:
         id: review
         run: |
           gh workflow run test.yml --ref ${{github.head_ref}}
-      - run: echo ${{jobs.review.result}}
+      - name: test
+        shell: bash
+        run: echo ${{jobs.review.result}}
       - name: update status
         shell: bash
         run: |
