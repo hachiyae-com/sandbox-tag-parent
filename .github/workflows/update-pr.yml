@@ -10,7 +10,7 @@ jobs:
   update-commit:
     runs-on: ubuntu-latest
     env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.PAT }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -21,8 +21,8 @@ jobs:
         run: |
           echo "test\n" >> .github/test.md
           git add .github/test.md
-          git config --local user.name "github-actions[bot]@users.noreply.github.com"
-          git config --local user.email "github-actions[bot]"
+          git config --local user.name "Eiji Hachiya"
+          git config --local user.email "hachiyae@gmail.com"
           git remote set-url origin "https://${GITHUB_AUTHOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git commit -m "chore: update"
           git push origin HEAD:${{github.head_ref}}
@@ -36,12 +36,11 @@ jobs:
       - name: test
         shell: bash
         run: echo ${{steps.review.conclusion}}
-      - name: update status
+      - name: run id
         shell: bash
         run: |
-          gh api \
-            --method POST \
-            -H "Accept: application/vnd.github+json" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            "/repos/${{ github.repository }}/statuses/${{ steps.commit.outputs.sha }}" \
-           -f "state=${{steps.review.conclusion}}" -f "context=test/review(pull_request)"
+          RUN_RESULT=$(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -d "event=pull_request" -d "branch=${{github.head_ref}}" /repos/${{ github.repository }}/actions/runs)
+          echo ${RUN_RESULT}
+          
+          
+  
