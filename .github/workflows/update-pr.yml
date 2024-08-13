@@ -1,0 +1,27 @@
+name: update pull request
+on:
+  pull_request:
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  update-commit:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.PAT }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: update git commit
+        shell: bash
+        run: |
+          echo "test\n" >> .github/test.md
+          git add .github/test.md
+          git config --local user.name "Eiji Hachiya"
+          git config --local user.email "hachiyae@gmail.com"
+          git remote set-url origin "https://${GITHUB_AUTHOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git commit -m "chore: update"
+          git push origin HEAD:${{github.head_ref}}
