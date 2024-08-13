@@ -75,9 +75,12 @@ jobs:
         shell: bash
         run: |
           STATUS=${{needs.re-run-review1.outputs.conclusion}}
-          curl -X POST -H "Authorization: token ${GITHUB_TOKEN}" \
-            -d '{"state": "${STATUS}", "context": "review2", "description": "Description of the status"}' \
-            https://api.github.com/repos/${{ github.repository }}/statuses/${{ needs.update-commit.outputs.sha }}
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /repos/${{ github.repository }}/statuses/${{ needs.update-commit.outputs.sha }} \
+           -f "state=${STATUS}" -f "context=review2"
   update-status-review2:
     runs-on: ubuntu-latest
     needs: [re-run-review2]
@@ -88,6 +91,9 @@ jobs:
         shell: bash
         run: |
           STATUS=${{needs.re-run-review2.outputs.conclusion}}
-          curl -X POST -H "Authorization: token ${GITHUB_TOKEN}" \
-            -d '{"state": "${STATUS}", "context": "review2", "description": "Description of the status"}' \
-            https://api.github.com/repos/${{ github.repository }}/statuses/${{ needs.update-commit.outputs.sha }}
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /repos/${{ github.repository }}/statuses/${{ needs.update-commit.outputs.sha }} \
+           -f "state=${STATUS}" -f "context=review2"
