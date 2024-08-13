@@ -25,7 +25,18 @@ jobs:
           git remote set-url origin "https://${GITHUB_AUTHOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git commit -m "chore: update"
           git push origin HEAD:${{github.head_ref}}
-      - name: re-run test
+      - name: re-run review
         shell: bash
+        id: review
         run: |
           gh workflow run test.yml --ref ${{github.head_ref}}
+      - run: echo ${{jobs.review.result}}
+      - name: update status
+        shell: bash
+        run: |
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            ${GITHUB_REPOSITORY}/statuses/${{ github.sha }} \
+           -f "state=${{job.review.result}}" -f 
