@@ -12,7 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: cat
-        shell: bash
-        run: |
-          cat ./.github/test.md
+      - uses: ./.github/actions/review
+        with:
+          ref: ${{github.ref}}
