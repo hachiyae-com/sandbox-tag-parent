@@ -40,19 +40,20 @@ jobs:
         shell: bash
         run: |
           RUN_IDS=$(gh run list \
-          -b ${{github.head_ref}} \
-          --json "databaseId,number,workflowName" \
-          --jq '[.[] | select(.workflowName == "test" or .workflowName == "test2")] | group_by(.workflowName) | map(max_by(.number))' \
-          -R ${{ github.repository }})
+            -b ${{github.head_ref}} \
+            --json "databaseId,number,workflowName" \
+            --jq '[.[] | select(.workflowName == "test" or .workflowName == "test2")] | group_by(.workflowName) | map(max_by(.number))' \
+            -R ${{ github.repository }})
           RUN_IDS=$(gh run list \
-          -b ${{github.head_ref}} \
-          --json "databaseId,number,workflowName" \
-          --jq '[.[] | select(.workflowName == "test" or .workflowName == "test2")] | group_by(.workflowName) | map(max_by(.number))' \
-          -R ${{ github.repository }})
+            -b ${{github.head_ref}} \
+            --json "databaseId,number,workflowName" \
+            --jq '[.[] | select(.workflowName == "test" or .workflowName == "test2")] | group_by(.workflowName) | map(max_by(.number))' \
+            -R ${{ github.repository }})
           RUN_ID=$(echo $RUN_IDS | jq -r '.[] | select(.workflowName == "test").databaseId')
+          echo ${RUN_ID}
           gh api \
             --method POST \
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
-            /repos/${{github.repository}}/actions/runs/$RUN_ID/deployment_protection_rule \
+            "/repos/${{github.repository}}/actions/runs/${RUN_ID}/deployment_protection_rule" \
              -f "environment_name=test" -f "state=approved"
