@@ -18,11 +18,10 @@ permission:
   content: read
   pull-request: read
 runs:
-  env:
-    GITHUB_TOEKN: ${{inputs.github-token}}
   using: composite
   steps:
     - name: echo input data
+      shell: bash
       run: |
         echo ${{inputs.head-ref}}
         echo ${{inputs.workflow-yml}}
@@ -30,6 +29,8 @@ runs:
       with:
         ref: ${{inputs.ref}}
     - name: run review
+      env:
+        GITHUB_TOKEN: ${{inputs.github-token}}
       shell: bash
       id: review
       run: |
