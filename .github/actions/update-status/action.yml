@@ -1,0 +1,34 @@
+# see: https://docs.github.com/ja/rest/commits/statuses?apiVersion=2022-11-28#create-a-commit-status
+name: update-status
+description: "Update GitHub pull request status"
+inputs:
+  github_token:
+    required: true
+  repository:
+    required: true
+  commit_sha:
+    required: true
+    description: "Commit SHA(long version)"
+  state:
+    required: true
+    description: "Update state"
+  context:
+    required: true
+    description: "context"
+permission:
+  content: read
+  pull-request: read
+runs:
+  env:
+    GITHUB_TOEKN: ${{inputs.github_token}}
+  using: composite
+  steps:
+    - name: update status
+      shell: bash
+      run: |
+        gh api \
+          --method POST \
+          -H "Accept: application/vnd.github+json" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          /repos/${{inputs.repository}}/statuses/${{inputs.commit_sh }} \
+         -f "state=${{inputs.state}}" -f "context=${{inputs.context}}"
