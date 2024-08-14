@@ -34,12 +34,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: [update-commit]
     outputs:
-      conclusion: ${{ steps.review1.outputs.status }}
+      conclusion: ${{ steps.review.outputs.status }}
       sha: ${{needs.update-commit.outputs.sha}}
     steps:
       - uses: actions/checkout@v4
       - name: review
-        id: reivew1
+        id: review
         uses: ./.github/actions/review
         with:
           head-ref: ${{github.head_ref}}
@@ -49,7 +49,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [update-commit]
     outputs:
-      conclusion: ${{ steps.review2.outputs.status }}
+      conclusion: ${{ steps.review.outputs.status }}
       sha: ${{needs.update-commit.outputs.sha}}
     steps:
       - uses: actions/checkout@v4
