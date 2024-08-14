@@ -54,7 +54,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: review
-        id: reivew2
+        id: reivew
         uses: ./.github/actions/review
         with:
           head-ref: ${{github.head_ref}}
