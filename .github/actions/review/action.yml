@@ -1,9 +1,19 @@
 name: review
-description: this is sample
+description: "Run workflow dispatch"
 inputs:
-  ref:
+  head_ref:
     required: true
-    description: git ref
+    description: "github head_ref"
+  github_token:
+    required: true
+  workflow_yml:
+    required: true
+    description: "workflow yaml name"
+outputs:
+  conclusion:
+    description: "workflow result status"
+    value: ${{steps.review.outputs.conclusion}}
+
 permission:
   content: read
   pull-request: read
@@ -13,7 +23,12 @@ runs:
     - uses: actions/checkout@v4
       with:
         ref: ${{inputs.ref}}
-    - name: cat
+    - name: run review
       shell: bash
+      id: review
       run: |
-        cat ./.github/test.md
+        gh workflow run ${{inputs.workflow_yml}} --ref ${{inputs.head_ref}}
+        RUN_ID=$(gh run list --workflow=${{inputs.workflow_yml}} -b ${{inputs.head_ref}} -e workflow_dispatch --json number,status,conclusion,databaseId --jq '. | max_by(.number).databaseId')
+        gh run watch ${RUN_ID}
+        conclusion=$(gh run list --workflow=${{inputs.workflow_yml}} -b ${{inputs.head_ref}} -e workflow_dispatch --json number,status,conclusion,databaseId --jq ".[] | select(.databaseId == ${RUN_ID}).conclusion")
+        echo "conclusion=${conclusion}" >> "$GITHUB_OUTPUT"
