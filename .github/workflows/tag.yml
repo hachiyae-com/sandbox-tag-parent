@@ -1,45 +1,45 @@
-name: tag.yml
-on:
-  repository_dispatch:
-    types: [on-demand-test]
-  push:
-    branches:
-      - staging
-      - main
-permissions:
-  contents: write
-  
-jobs:
-  tag:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.ref }}
-      - uses: actions/setup-node@v4
-      - name: Create staging tag
-        if: ${{ github.ref == 'refs/heads/staging' }}
-        uses: ./.github/actions/tag
-        with:
-         token: ${{ secrets.GITHUB_TOKEN }}
-         tag: 'staging-test'
-         ref: ${{ github.ref }}
-         force: 'true'
-      - name: Create production tag name
-        shell: bash
-        id: tag-name
-        if: ${{ github.ref == 'refs/heads/main' }}
-        run: |
-          release_number=$(git ls-remote --tags | grep 'refs/tags/release-' | awk -F' ' '{print $2}' | tr -d 'refs/tags/release-' | sort -V | awk -F'.' '{print $1}' | tail -n 1)
-          release_number=${release_number:-1}
-          release_number=$((release_number+1))
-          tag_name="release-${release_number}.0.0"
-          echo ${tag_name}
-          echo "tag_name=${tag_name}" >> $GITHUB_OUTPUT
-      - name: Create production tag
-        if: ${{ github.ref == 'refs/heads/main' }}
-        uses: ./.github/actions/tag
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ steps.tag-name.outputs.tag_name }}
-          ref: ${{ github.ref }}
+# name: tag.yml
+# on:
+#   repository_dispatch:
+#     types: [on-demand-test]
+#   push:
+#     branches:
+#       - staging
+#       - main
+# permissions:
+#   contents: write
+#   
+# jobs:
+#   tag:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
+#         with:
+#           ref: ${{ github.ref }}
+#       - uses: actions/setup-node@v4
+#       - name: Create staging tag
+#         if: ${{ github.ref == 'refs/heads/staging' }}
+#         uses: ./.github/actions/tag
+#         with:
+#          token: ${{ secrets.GITHUB_TOKEN }}
+#          tag: 'staging-test'
+#          ref: ${{ github.ref }}
+#          force: 'true'
+#       - name: Create production tag name
+#         shell: bash
+#         id: tag-name
+#         if: ${{ github.ref == 'refs/heads/main' }}
+#         run: |
+#           release_number=$(git ls-remote --tags | grep 'refs/tags/release-' | awk -F' ' '{print $2}' | tr -d 'refs/tags/release-' | sort -V | awk -F'.' '{print $1}' | tail -n 1)
+#           release_number=${release_number:-1}
+#           release_number=$((release_number+1))
+#           tag_name="release-${release_number}.0.0"
+#           echo ${tag_name}
+#           echo "tag_name=${tag_name}" >> $GITHUB_OUTPUT
+#       - name: Create production tag
+#         if: ${{ github.ref == 'refs/heads/main' }}
+#         uses: ./.github/actions/tag
+#         with:
+#           token: ${{ secrets.GITHUB_TOKEN }}
+#           tag: ${{ steps.tag-name.outputs.tag_name }}
+#           ref: ${{ github.ref }}
