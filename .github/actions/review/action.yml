@@ -5,6 +5,7 @@ inputs:
     required: true
     description: "github head-ref"
   github-token:
+    description: "github token"
     required: true
   workflow-yml:
     required: true
@@ -13,10 +14,6 @@ outputs:
   conclusion:
     description: "workflow result status"
     value: ${{steps.review.outputs.conclusion}}
-
-permission:
-  content: read
-  pull-request: read
 runs:
   using: composite
   steps:
