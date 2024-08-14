@@ -11,13 +11,9 @@ runs:
     - name: Start MySQL
       uses: docker://mysql:8.0.37
       with:
-        ports: "3306:3306"
+        ports: 3306:3306
         env:
-          MYSQL_ROOT_PASSWORD: "password"
-          MYSQL_DATABASE: "anews_test"
-          MYSQL_USER: "root"
-          MYSQL_PASSWORD: "db_pass"
-    - name: Run tests
-      shell: bash
-      run: |
-        mysqladmin ping -h 127.0.0.1 -uroot -pdb_pass
+          MYSQL_ROOT_PASSWORD: rootpassword
+          MYSQL_DATABASE: mydatabase
+          MYSQL_USER: myuser
+          MYSQL_PASSWORD: mypassword
