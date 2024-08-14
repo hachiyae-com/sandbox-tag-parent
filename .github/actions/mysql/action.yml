@@ -9,11 +9,16 @@ runs:
   using: composite
   steps:
     - name: Start MySQL
-      uses: docker://mysql:8.0.37
-      with:
-        ports: 3306:3306
-        env:
-          - MYSQL_ROOT_PASSWORD: rootpassword
-          - MYSQL_DATABASE: mydatabase
-          - MYSQL_USER: myuser
-          - MYSQL_PASSWORD: mypassword
+      shell: bash
+      run: |
+        docker run -d --name mysql \
+          -p 3306:3306 \
+          -e MYSQL_ROOT_PASSWORD=rootpassword \
+          -e MYSQL_DATABASE=mydatabase \
+          -e MYSQL_USER=myuser \
+          -e MYSQL_PASSWORD=mypassword \
+          --health-cmd="mysqladmin ping" \
+          --health-interval="5s" \
+          --health-timeout="5s" \
+          --health-retries="5" \
+          mysql:8.0.37
