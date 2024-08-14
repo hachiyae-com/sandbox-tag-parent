@@ -1,17 +1,17 @@
-name: test2
-on:
-  workflow_dispatch:
-  pull_request:
-
-permissions:
-  contents: read
-  pull-requests: read
-
-jobs:
-  review2:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: cat
-        shell: bash
-        run: cat ./.github/test.md
+# name: test2
+# on:
+#   workflow_dispatch:
+#   pull_request:
+#
+# permissions:
+#   contents: read
+#   pull-requests: read
+#
+# jobs:
+#   review2:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
+#       - name: cat
+#         shell: bash
+#         run: cat ./.github/test.md
