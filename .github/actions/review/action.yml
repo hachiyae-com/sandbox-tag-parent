@@ -35,6 +35,7 @@ runs:
       id: review
       run: |
         gh workflow run ${{inputs.workflow-yml}} --ref ${{inputs.head-ref}}
+        sleep 5
         RUN_ID=$(gh run list --workflow=${{inputs.workflow-yml}} -b ${{inputs.head-ref}} -e workflow_dispatch --json number,status,conclusion,databaseId --jq '. | max_by(.number).databaseId')
         gh run watch ${RUN_ID}
         conclusion=$(gh run list --workflow=${{inputs.workflow-yml}} -b ${{inputs.head-ref}} -e workflow_dispatch --json number,status,conclusion,databaseId --jq ".[] | select(.databaseId == ${RUN_ID}).conclusion")
