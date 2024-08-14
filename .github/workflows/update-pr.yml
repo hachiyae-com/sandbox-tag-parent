@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [update-commit]
     outputs:
-      conclusion: ${{ steps.review1.conclusion }}
+      conclusion: ${{ steps.review1.outputs.conclusion }}
       sha: ${{needs.update-commit.outputs.sha}}
     steps:
       - uses: actions/checkout@v4
@@ -49,7 +49,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [update-commit]
     outputs:
-      conclusion: ${{ steps.review2.conclusion }}
+      conclusion: ${{ steps.review2.outputs.conclusion }}
       sha: ${{needs.update-commit.outputs.sha}}
     steps:
       - uses: actions/checkout@v4
