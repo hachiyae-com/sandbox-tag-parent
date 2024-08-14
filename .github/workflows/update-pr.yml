@@ -7,29 +7,29 @@ permissions:
   pull-requests: write
 
 jobs:
-  update-commit:
-    runs-on: ubuntu-latest
-    env:
-      GITHUB_TOKEN: ${{ secrets.PAT }}
-    outputs:
-      sha: ${{steps.commit.outputs.sha}}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-      - name: update git commit
-        shell: bash
-        id: commit
-        run: |
-          echo "test\n" >> .github/test.md
-          git add .github/test.md
-          git config --local user.name "Eiji Hachiya"
-          git config --local user.email "hachiyae@gmail.com"
-          git remote set-url origin "https://${GITHUB_AUTHOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-          git commit -m "chore: update"
-          git push -u origin HEAD:${{github.event.pull_request.head.ref}}
-          git rev-parse HEAD
-          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+  # update-commit:
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     GITHUB_TOKEN: ${{ secrets.PAT }}
+  #   outputs:
+  #     sha: ${{steps.commit.outputs.sha}}
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #       with:
+  #         ref: ${{ github.event.pull_request.head.sha }}
+  #     - name: update git commit
+  #       shell: bash
+  #       id: commit
+  #       run: |
+  #         echo "test\n" >> .github/test.md
+  #         git add .github/test.md
+  #         git config --local user.name "Eiji Hachiya"
+  #         git config --local user.email "hachiyae@gmail.com"
+  #         git remote set-url origin "https://${GITHUB_AUTHOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+  #         git commit -m "chore: update"
+  #         git push -u origin HEAD:${{github.event.pull_request.head.ref}}
+  #         git rev-parse HEAD
+  #         echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
   mysql:
     runs-on: ubuntu-latest
     steps:
