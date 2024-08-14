@@ -11,7 +11,7 @@ inputs:
     required: true
     description: "workflow yaml name"
 outputs:
-  status:
+  conclusion:
     description: "workflow result status"
     value: ${{steps.review.outputs.conclusion}}
 runs:
