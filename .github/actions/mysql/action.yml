@@ -22,3 +22,8 @@ runs:
           --health-timeout="5s" \
           --health-retries="5" \
           mysql:8.0.37
+    - name: Test
+      shell: bash
+      run: |
+        apt-get install -y mysql
+        mysql -h 127.0.0.1 -umyuser -prootpassword mydatabase -e 'show databases'
