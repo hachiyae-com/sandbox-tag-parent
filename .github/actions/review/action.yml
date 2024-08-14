@@ -39,4 +39,5 @@ runs:
         RUN_ID=$(gh run list --workflow=${{inputs.workflow-yml}} -b ${{inputs.head-ref}} -e workflow_dispatch --json number,status,conclusion,databaseId --jq '. | max_by(.number).databaseId')
         gh run watch ${RUN_ID}
         conclusion=$(gh run list --workflow=${{inputs.workflow-yml}} -b ${{inputs.head-ref}} -e workflow_dispatch --json number,status,conclusion,databaseId --jq ".[] | select(.databaseId == ${RUN_ID}).conclusion")
+        echo "conclusion=${conclusion}"
         echo "conclusion=${conclusion}" >> "$GITHUB_OUTPUT"
