@@ -18,6 +18,8 @@ permission:
   content: read
   pull-request: read
 runs:
+  env:
+    GITHUB_TOEKN: ${{inputs.github_token}}
   using: composite
   steps:
     - uses: actions/checkout@v4
