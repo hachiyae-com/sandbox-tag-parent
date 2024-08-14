@@ -1,12 +1,12 @@
 name: review
 description: "Run workflow dispatch"
 inputs:
-  head_ref:
+  head-ref:
     required: true
-    description: "github head_ref"
-  github_token:
+    description: "github head-ref"
+  github-token:
     required: true
-  workflow_yml:
+  workflow-yml:
     required: true
     description: "workflow yaml name"
 outputs:
@@ -19,13 +19,13 @@ permission:
   pull-request: read
 runs:
   env:
-    GITHUB_TOEKN: ${{inputs.github_token}}
+    GITHUB_TOEKN: ${{inputs.github-token}}
   using: composite
   steps:
     - name: echo input data
       run: |
-        echo ${{inputs.head_ref}}
-        echo ${{inputs.workflow_yml}}
+        echo ${{inputs.head-ref}}
+        echo ${{inputs.workflow-yml}}
     - uses: actions/checkout@v4
       with:
         ref: ${{inputs.ref}}
@@ -33,8 +33,8 @@ runs:
       shell: bash
       id: review
       run: |
-        gh workflow run ${{inputs.workflow_yml}} --ref ${{inputs.head_ref}}
-        RUN_ID=$(gh run list --workflow=${{inputs.workflow_yml}} -b ${{inputs.head_ref}} -e workflow_dispatch --json number,status,conclusion,databaseId --jq '. | max_by(.number).databaseId')
+        gh workflow run ${{inputs.workflow-yml}} --ref ${{inputs.head-ref}}
+        RUN_ID=$(gh run list --workflow=${{inputs.workflow-yml}} -b ${{inputs.head-ref}} -e workflow_dispatch --json number,status,conclusion,databaseId --jq '. | max_by(.number).databaseId')
         gh run watch ${RUN_ID}
-        conclusion=$(gh run list --workflow=${{inputs.workflow_yml}} -b ${{inputs.head_ref}} -e workflow_dispatch --json number,status,conclusion,databaseId --jq ".[] | select(.databaseId == ${RUN_ID}).conclusion")
+        conclusion=$(gh run list --workflow=${{inputs.workflow-yml}} -b ${{inputs.head-ref}} -e workflow_dispatch --json number,status,conclusion,databaseId --jq ".[] | select(.databaseId == ${RUN_ID}).conclusion")
         echo "conclusion=${conclusion}" >> "$GITHUB_OUTPUT"
