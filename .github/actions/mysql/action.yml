@@ -1,0 +1,23 @@
+name: mysql
+description: run mysql
+inputs:
+  git-ref:
+    required: true
+    description: "Git Ref"
+
+runs:
+  using: composite
+  steps:
+    - name: Start MySQL
+      uses: docker://mysql:8.0.37
+      with:
+        ports: "3306:3306"
+        env:
+          MYSQL_ROOT_PASSWORD: "password"
+          MYSQL_DATABASE: "anews_test"
+          MYSQL_USER: "root"
+          MYSQL_PASSWORD: "db_pass"
+    - name: Run tests
+      shell: bash
+      run: |
+        mysqladmin ping -h 127.0.0.1 -uroot -pdb_pass
