@@ -22,6 +22,10 @@ runs:
     GITHUB_TOEKN: ${{inputs.github_token}}
   using: composite
   steps:
+    - name: echo input data
+      run: |
+        echo ${{inputs.head_ref}}
+        echo ${{inputs.workflow_yml}}
     - uses: actions/checkout@v4
       with:
         ref: ${{inputs.ref}}
