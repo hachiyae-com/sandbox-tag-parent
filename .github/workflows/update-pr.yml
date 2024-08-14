@@ -35,6 +35,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/mysql
+        with:
+          git-ref: ${{github.head_ref}}
   # re-run-review1:
   #   runs-on: ubuntu-latest
   #   needs: [update-commit]
