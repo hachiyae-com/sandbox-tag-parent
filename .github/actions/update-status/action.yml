@@ -19,12 +19,12 @@ permission:
   content: read
   pull-request: read
 runs:
-  env:
-    GITHUB_TOEKN: ${{inputs.github-token}}
   using: composite
   steps:
     - name: update status
       shell: bash
+      env:
+        GITHUB_TOKEN: ${{inputs.github-token}}
       run: |
         gh api \
           --method POST \
