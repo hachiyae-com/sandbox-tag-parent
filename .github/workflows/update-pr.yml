@@ -42,9 +42,9 @@ jobs:
         id: reivew1
         uses: ./.github/actions/review
         with:
-          head_ref: ${{github.head_ref}}
-          github_token: ${{ secrets.PAT }}
-          workflow_yml: test.yml
+          head-ref: ${{github.head_ref}}
+          github-token: ${{ secrets.PAT }}
+          workflow-yml: test.yml
   re-run-review2:
     runs-on: ubuntu-latest
     needs: [update-commit]
@@ -57,9 +57,9 @@ jobs:
         id: reivew2
         uses: ./.github/actions/review
         with:
-          head_ref: ${{github.head_ref}}
-          github_token: ${{ secrets.PAT }}
-          workflow_yml: test2.yml
+          head-ref: ${{github.head_ref}}
+          github-token: ${{ secrets.PAT }}
+          workflow-yml: test2.yml
   update-status-review1:
     runs-on: ubuntu-latest
     needs: [re-run-review1]
@@ -68,9 +68,9 @@ jobs:
       - name: update status
         uses: ./.github/actions/update-status
         with:
-          github_token: ${{ secrets.PAT }}
+          github-token: ${{ secrets.PAT }}
           repository: ${{ github.repository }}
-          commit_sha: ${{ needs.re-run-review1.outputs.sha }}
+          commit-sha: ${{ needs.re-run-review1.outputs.sha }}
           state: ${{ needs.re-run-review1.outputs.conclusion }}
           context: review
   update-status-review2:
@@ -81,8 +81,8 @@ jobs:
       - name: update status
         uses: ./.github/actions/update-status
         with:
-          github_token: ${{ secrets.PAT }}
+          github-token: ${{ secrets.PAT }}
           repository: ${{ github.repository }}
-          commit_sha: ${{ needs.re-run-review2.outputs.sha }}
+          commit-sha: ${{ needs.re-run-review2.outputs.sha }}
           state: ${{ needs.re-run-review2.outputs.conclusion }}
           context: review2
