@@ -21,11 +21,12 @@ jobs:
         shell: bash
         id: commit
         run: |
+          echo ${GITHUB_ACTOR}
           echo "test\n" >> .github/test.md
           git add .github/test.md
           git config --local user.name "dependabot[bot]"
           git config --local user.email "dependabot[bot]@users.noreply.github.com"
-          git remote set-url origin "https://${GITHUB_AUTHOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git remote set-url origin "https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git commit -m "chore: update"
           git push -u origin HEAD:${{github.event.pull_request.head.ref}}
           git rev-parse HEAD
