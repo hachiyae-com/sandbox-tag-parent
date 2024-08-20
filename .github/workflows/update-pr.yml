@@ -30,66 +30,59 @@ jobs:
           git push -u origin HEAD:${{github.event.pull_request.head.ref}}
           git rev-parse HEAD
           echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-  mysql:
+   re-run-review1:
+     runs-on: ubuntu-latest
+     outputs:
+       conclusion: ${{ steps.review.outputs.conclusion }}
+       sha: ${{needs.update-commit.outputs.sha}}
+     steps:
+       - uses: actions/checkout@v4
+       - name: review
+         id: review
+         uses: ./.github/actions/review
+         with:
+           head-ref: ${{github.head_ref}}
+           github-token: ${{ secrets.PAT }}
+           workflow-yml: test2.yml
+  re-run-review2:
     runs-on: ubuntu-latest
+    needs: [update-commit]
+    outputs:
+      conclusion: ${{ steps.review.outputs.conclusion }}
+      sha: ${{needs.update-commit.outputs.sha}}
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/mysql
+      - name: review
+        id: review
+        uses: ./.github/actions/review
         with:
-          git-ref: ${{github.head_ref}}
-  # re-run-review1:
-  #   runs-on: ubuntu-latest
-  #   needs: [update-commit]
-  #   outputs:
-  #     conclusion: ${{ steps.review.outputs.conclusion }}
-  #     sha: ${{needs.update-commit.outputs.sha}}
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - name: review
-  #       id: review
-  #       uses: ./.github/actions/review
-  #       with:
-  #         head-ref: ${{github.head_ref}}
-  #         github-token: ${{ secrets.PAT }}
-  #         workflow-yml: test.yml
-  # re-run-review2:
-  #   runs-on: ubuntu-latest
-  #   needs: [update-commit]
-  #   outputs:
-  #     conclusion: ${{ steps.review.outputs.conclusion }}
-  #     sha: ${{needs.update-commit.outputs.sha}}
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - name: review
-  #       id: review
-  #       uses: ./.github/actions/review
-  #       with:
-  #         head-ref: ${{github.head_ref}}
-  #         github-token: ${{ secrets.PAT }}
-  #         workflow-yml: test2.yml
-  # update-status-review1:
-  #   runs-on: ubuntu-latest
-  #   needs: [re-run-review1]
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - name: update status
-  #       uses: ./.github/actions/update-status
-  #       with:
-  #         github-token: ${{ secrets.PAT }}
-  #         repository: ${{ github.repository }}
-  #         commit-sha: ${{ needs.re-run-review1.outputs.sha }}
-  #         state: ${{ needs.re-run-review1.outputs.conclusion }}
-  #         context: review
-  # update-status-review2:
-  #   runs-on: ubuntu-latest
-  #   needs: [re-run-review2]
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - name: update status
-  #       uses: ./.github/actions/update-status
-  #       with:
-  #         github-token: ${{ secrets.PAT }}
-  #         repository: ${{ github.repository }}
-  #         commit-sha: ${{ needs.re-run-review2.outputs.sha }}
-  #         state: ${{ needs.re-run-review2.outputs.conclusion }}
-  #         context: review2
+          head-ref: ${{github.head_ref}}
+          github-token: ${{ secrets.PAT }}
+          workflow-yml: test2.yml
+  update-status-review1:
+    runs-on: ubuntu-latest
+    needs: [re-run-review1]
+    steps:
+      - uses: actions/checkout@v4
+      - name: update status
+        uses: ./.github/actions/update-status
+        with:
+          github-token: ${{ secrets.PAT }}
+          repository: ${{ github.repository }}
+          commit-sha: ${{ needs.re-run-review1.outputs.sha }}
+          state: ${{ needs.re-run-review1.outputs.conclusion }}
+          context: review
+  update-status-review2:
+    runs-on: ubuntu-latest
+    needs: [re-run-review2]
+    steps:
+      - uses: actions/checkout@v4
+      - name: update status
+        uses: ./.github/actions/update-status
+        with:
+          github-token: ${{ secrets.PAT }}
+          repository: ${{ github.repository }}
+          commit-sha: ${{ needs.re-run-review2.outputs.sha }}
+          state: ${{ needs.re-run-review2.outputs.conclusion }}
+          context: review2
+
