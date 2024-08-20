@@ -10,7 +10,7 @@ jobs:
   update-commit:
     runs-on: ubuntu-latest
     env:
-      GITHUB_TOKEN: ${{ secret.GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.PAT }}
     outputs:
       sha: ${{steps.commit.outputs.sha}}
     steps:
