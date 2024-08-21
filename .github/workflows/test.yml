@@ -17,7 +17,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: echo ${{inputs.reporter}}
+      - name: select reporter
+        shell: bash
+        id: reporter
+        run: |
+          if [ ${{github.event_name}} = 'workflow_dispatch' ]; then
+            echo "reporter=${{inputs.reporter}}" >> "$GITHUB_OUTPUT"
+          else
+            echo "reporter='github-pr-review'" >> "$GITHUB_OUTPUT"
+          fi
+      - run: echo ${{steps.reporter.output.reporter}}
       - name: cat
         shell: bash
         run: cat ./.github/test.md
