@@ -1,6 +1,11 @@
 name: test
 on:
   workflow_dispatch:
+    inputs:
+      reporter:
+        description: "reporter"
+        required: false
+        default: "github-pr-review"
   pull_request:
 
 permissions:
@@ -12,6 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - run: echo ${{inputs.reporter}}
       - name: cat
         shell: bash
         run: cat ./.github/test.md
