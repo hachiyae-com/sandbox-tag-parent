@@ -27,6 +27,7 @@ jobs:
             echo "reporter='github-pr-review'" >> "$GITHUB_OUTPUT"
           fi
       - run: echo ${{steps.reporter.output.reporter}}
+      - run: echo $GITHUB_OUTPUT
       - name: cat
         shell: bash
         run: cat ./.github/test.md
